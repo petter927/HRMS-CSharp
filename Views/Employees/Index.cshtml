@@ -1,0 +1,357 @@
+﻿@model IEnumerable<Skygate_AspNet_MVC.Models.Employee>
+
+@{
+    ViewData["Title"] = "人事管理";
+}
+
+<style>    
+    .modern-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 36px;
+        box-shadow: 0 25px 40px -12px rgba(230, 126, 34, 0.25);
+        padding: 2rem 1.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        margin-bottom: 2rem;
+    }
+    
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .page-title i {
+        font-size: 2.2rem;
+        color: #e67e22;
+        background: linear-gradient(145deg, #e67e22, #d35400);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .page-title h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+        letter-spacing: -0.3px;
+    }
+    
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .search-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.5);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        border: 1px solid rgba(230, 126, 34, 0.2);
+        flex: 1 1 auto;
+    }
+
+    .search-form .form-control {
+        border: none;
+        background: white;
+        border-radius: 30px;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        width: auto;
+        min-width: 140px;
+    }
+
+    .search-form .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
+        outline: none;
+    }
+
+    .btn-search {
+        background: linear-gradient(145deg, #e67e22, #d35400);
+        border: none;
+        border-radius: 40px;
+        padding: 0.6rem 2rem;
+        font-weight: 500;
+        color: white;
+        transition: all 0.2s;
+        box-shadow: 0 8px 16px rgba(230, 126, 34, 0.2);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .btn-search:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(230, 126, 34, 0.3);
+        background: linear-gradient(145deg, #f39c12, #e67e22);
+    }
+
+    .btn-create {
+        background: white;
+        border: 1px solid #e67e22;
+        color: #e67e22;
+        border-radius: 40px;
+        padding: 0.6rem 2rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .btn-create:hover {
+        background: #e67e22;
+        color: white;
+        border-color: #e67e22;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(230, 126, 34, 0.2);
+    }
+    
+    .alert-modern {
+        background: rgba(255, 255, 255, 0.9);
+        border-left: 6px solid #e67e22;
+        border-radius: 20px;
+        box-shadow: 0 8px 16px rgba(230, 126, 34, 0.1);
+        color: #2c3e50;
+        font-weight: 500;
+        padding: 1rem 1.8rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .alert-modern i {
+        font-size: 1.6rem;
+        color: #e67e22;
+    }
+    
+    .table-responsive-modern {
+        overflow-x: auto;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.4);
+        padding: 1px; /* 避免背景溢出圓角 */
+    }
+    
+    .table-modern {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px; 
+        background: transparent;
+    }
+
+    .table-modern thead th {
+        background: linear-gradient(145deg, #e67e22, #d35400);
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 1rem 0.8rem;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .table-modern thead th:first-child {
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+    }
+
+    .table-modern thead th:last-child {
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .table-modern tbody tr {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s;
+    }
+
+    .table-modern tbody tr:hover {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 18px rgba(230, 126, 34, 0.1);
+        transform: scale(1.002);
+    }
+
+    .table-modern td {
+        padding: 1rem 0.8rem;
+        vertical-align: middle;
+        border: none;
+        color: #2c3e50;
+        font-size: 0.95rem;
+        white-space: nowrap;
+    }
+
+    .table-modern td:first-child {
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+    }
+
+    .table-modern td:last-child {
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    
+    .action-group {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .manage-btn {
+        padding: 0.4rem 1rem;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid transparent;
+    }
+
+    .btn-edit {
+        background: rgba(230, 126, 34, 0.1);
+        color: #e67e22;
+        border-color: #e67e22;
+    }
+
+    .btn-edit:hover {
+        background: #e67e22;
+        color: white;
+    }
+
+    .btn-detail {
+        background: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+        border-color: #3498db;
+    }
+
+    .btn-detail:hover {
+        background: #3498db;
+        color: white;
+    }
+
+    .btn-delete {
+        background: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+        border-color: #e74c3c;
+    }
+
+    .btn-delete:hover {
+        background: #e74c3c;
+        color: white;
+    }
+    
+    .search-form .form-control::placeholder {
+        color: #b0a090;
+        font-weight: 400;
+    }
+    
+    .no-data {
+        text-align: center;
+        padding: 3rem;
+        color: #7f8c8d;
+        font-size: 1.1rem;
+    }
+</style>
+
+<div class="modern-card">    
+    <div class="page-title">
+        <i class="fas fa-users-cog"></i>
+        <h1>人事管理</h1>
+    </div>
+    
+    <div class="toolbar">
+        <form asp-action="Index" method="get" class="search-form">
+            <span class="text-secondary" style="margin-right: 0.5rem;"><i class="fas fa-search"></i></span>
+            <input type="text" name="DeptId" placeholder="部門" class="form-control" />
+            <input type="text" name="EmpId" value="@ViewData["EmpId"]" placeholder="工號" class="form-control" />
+            <input type="text" name="EmpName" placeholder="姓名" class="form-control" />
+            <button type="submit" class="btn-search">
+                <i class="fas fa-paper-plane" style="margin-right: 6px;"></i>送出查詢
+            </button>
+        </form>
+
+        <a asp-action="Create" class="btn-create">
+            <i class="fas fa-plus-circle"></i> 新增員工
+        </a>
+    </div>
+    
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <div class="alert-modern alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i>
+            @TempData["SuccessMsg"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    
+    <div class="table-responsive-modern">
+        <table class="table-modern">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.EmpName)</th>
+                    <th>@Html.DisplayNameFor(model => model.EmpId)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeptId)</th>
+                    <th>@Html.DisplayNameFor(model => model.Title)</th>
+                    <th>@Html.DisplayNameFor(model => model.SupervisorId)</th>
+                    <th>@Html.DisplayNameFor(model => model.Status)</th>
+                    <th>@Html.DisplayNameFor(model => model.HireDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.LeaveDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.EmpName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.EmpId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DeptId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SupervisorId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td>@item.HireDate.ToString("yyyy-MM-dd")</td>
+                        <td>@(item.LeaveDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                        <td>
+                            <div class="action-group">
+                                <a asp-action="Edit" asp-route-id="@item.EmpId" class="manage-btn btn-edit">
+                                    <i class="fas fa-edit"></i> 編輯
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.EmpId" class="manage-btn btn-detail">
+                                    <i class="fas fa-info-circle"></i> 詳細
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.EmpId" class="manage-btn btn-delete">
+                                    <i class="fas fa-trash-alt"></i> 刪除
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    @if (!Model.Any())
+    {
+        <div class="no-data">
+            <i class="fas fa-database fa-2x mb-3" style="color: #ccc;"></i>
+            <p>目前沒有任何員工資料，請先新增。</p>
+        </div>
+    }
+</div>

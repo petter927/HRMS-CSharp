@@ -1,0 +1,280 @@
+﻿@*
+    
+*@
+@{
+    Layout = null; // 登入頁不用側邊欄
+}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登入 · 員工出勤系統</title>
+
+    <!-- Google Font-Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fef5e7;  
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -10px rgba(230, 126, 34, 0.2), 0 10px 20px -5px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 420px;
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            z-index: 2;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title i {
+            font-size: 2.5rem;
+            color: #e67e22;
+            background: linear-gradient(145deg, #e67e22, #d35400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .title h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            letter-spacing: -0.5px;
+        }
+        
+        .alert {
+            background: #ffe8e0;
+            border: 1px solid #ffb08e;
+            border-radius: 18px;
+            padding: 0.9rem 1.2rem;
+            color: #c0392b;
+            margin-bottom: 1.8rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .alert i {
+            font-size: 1.2rem;
+            color: #e67e22;
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #fadcba;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .input-group:focus-within {
+            border-color: #e67e22;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.15);
+        }
+
+        .input-group i {
+            color: #e67e22;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .input-group input {
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input::placeholder {
+            color: #b0a090;
+            font-weight: 400;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0 2rem;
+            font-size: 0.9rem;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #4a4a4a;
+        }
+
+        .remember input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #e67e22;
+            border-radius: 4px;
+        }
+
+        .forgot a {
+            color: #e67e22;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .forgot a:hover {
+            text-decoration: underline;
+            color: #d35400;
+        }
+        
+        .login-btn {
+            background: linear-gradient(145deg, #e67e22, #d35400);
+            border: none;
+            border-radius: 40px;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 18px rgba(230, 126, 34, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: scale(1.02);
+            background: linear-gradient(145deg, #f39c12, #e67e22);
+            box-shadow: 0 12px 24px rgba(230, 126, 34, 0.4);
+        }
+        
+        .register {
+            text-align: center;
+            color: #5a5a5a;
+            font-size: 0.95rem;
+        }
+
+        .register a {
+            color: #e67e22;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+        }
+        
+        .bottom-image {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 1;
+            pointer-events: none; /* 讓圖片不影響操作 */
+            opacity: 0.6;
+        }
+
+        .bottom-image img {
+            width: 100%;
+            max-height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .bottom-image.placeholder {
+            background: linear-gradient(to top, #fadcba, transparent);
+            height: 120px;
+            width: 100%;
+        }
+
+        /* 讓卡片浮在圖片上方 */
+        body {
+            justify-content: flex-start; /* 調整垂直位置，避免卡片被圖片擋住 */
+            padding-top: 5vh;
+        }
+    </style>
+</head>
+<body>    
+    <div class="login-card">        
+        <div class="title">
+            <i class="fas fa-clipboard-list"></i>  
+            <h2>員工出勤系統</h2>
+        </div>
+        
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                @ViewBag.Error
+            </div>
+        }
+        
+        <form asp-action="Login" method="post">            
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="account" class="form-control" placeholder="請輸入帳號" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" class="form-control" placeholder="密碼" required>
+            </div>
+            
+            <div class="options">
+                <label class="remember">
+                    <input type="checkbox" name="rememberMe"> 記住我
+                </label>
+                <div class="forgot">
+                    <a href="#">忘記密碼？</a>
+                </div>
+            </div>
+            
+            <button type="submit" class="login-btn">登入系統</button>
+        </form>
+        
+        <div class="register">
+            帳號有問題？ <a href="#">聯絡HR</a>
+        </div>
+    </div>
+    
+    <div class="bottom-image">        
+        <img src="~/Pic/Login/back.svg" alt="bottom decoration">        
+    </div>
+</body>
+</html>

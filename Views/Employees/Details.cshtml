@@ -1,0 +1,281 @@
+﻿@model Skygate_AspNet_MVC.Models.Employee
+
+@{
+    ViewData["Title"] = "員工詳細資料";
+}
+
+<style>
+    .modern-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 36px;
+        box-shadow: 0 25px 40px -12px rgba(230, 126, 34, 0.25);
+        padding: 2rem 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        margin-top: 1rem;
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .page-title i {
+        font-size: 2.2rem;
+        color: #e67e22;
+        background: linear-gradient(145deg, #e67e22, #d35400);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .page-title h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+        letter-spacing: -0.3px;
+    }
+
+    /* 詳細資料卡片 */
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem 2rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .detail-item {
+        border-bottom: 1px dashed rgba(230, 126, 34, 0.2);
+        padding-bottom: 0.5rem;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: #4a4a4a;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-bottom: 0.2rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .detail-label i {
+        color: #e67e22;
+        width: 20px;
+        text-align: center;
+    }
+
+    .detail-value {
+        font-size: 1.1rem;
+        color: #2c3e50;
+        font-weight: 500;
+        padding-left: 26px; /* 對齊圖示後的縮排 */
+    }
+
+    /* 狀態特殊樣式 */
+    .status-badge {
+        display: inline-block;
+        padding: 0.3rem 1rem;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .status-active {
+        background: rgba(46, 204, 113, 0.15);
+        color: #27ae60;
+        border: 1px solid #27ae60;
+    }
+
+    .status-inactive {
+        background: rgba(231, 76, 60, 0.15);
+        color: #c0392b;
+        border: 1px solid #c0392b;
+    }
+
+    /* 按鈕群組 */
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+    }
+
+    .btn-edit {
+        background: linear-gradient(145deg, #e67e22, #d35400);
+        border: none;
+        border-radius: 40px;
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        color: white;
+        transition: all 0.2s;
+        box-shadow: 0 8px 16px rgba(230, 126, 34, 0.2);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(230, 126, 34, 0.3);
+        background: linear-gradient(145deg, #f39c12, #e67e22);
+        color: white;
+    }
+
+    .btn-back {
+        background: white;
+        border: 1px solid #e67e22;
+        color: #e67e22;
+        border-radius: 40px;
+        padding: 0.8rem 2rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+        background: #e67e22;
+        color: white;
+        border-color: #e67e22;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(230, 126, 34, 0.2);
+    }
+
+    /* 空白值處理 */
+    .null-value {
+        color: #aaa;
+        font-style: italic;
+    }
+</style>
+
+<div class="modern-card">
+    <!-- 頁面標題 -->
+    <div class="page-title">
+        <i class="fas fa-id-card"></i>
+        <h1>員工詳細資料</h1>
+    </div>
+
+    <!-- 詳細資訊以格線呈現 -->
+    <div class="detail-grid">
+        <!-- 姓名 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-user"></i> 姓名</div>
+            <div class="detail-value">@Html.DisplayFor(model => model.EmpName)</div>
+        </div>
+
+        <!-- 工號 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-id-badge"></i> 工號</div>
+            <div class="detail-value">@Html.DisplayFor(model => model.EmpId)</div>
+        </div>
+
+        <!-- 部門 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-building"></i> 部門</div>
+            <div class="detail-value">@Html.DisplayFor(model => model.DeptId)</div>
+        </div>
+
+        <!-- 職稱 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-briefcase"></i> 職稱</div>
+            <div class="detail-value">@Html.DisplayFor(model => model.Title)</div>
+        </div>
+
+        <!-- 主管工號 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-user-tie"></i> 主管工號</div>
+            <div class="detail-value">
+                @if (string.IsNullOrEmpty(Model.SupervisorId))
+                {
+                    <span class="null-value">無</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.SupervisorId)
+                }
+            </div>
+        </div>
+
+        <!-- 在職狀態 (加上標籤) -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-toggle-on"></i> 在職狀態</div>
+            <div class="detail-value">
+                @{
+                    var status = Model.Status?.Trim();
+                    var badgeClass = (status == "在職" || status == "active") ? "status-active" : "status-inactive";
+                }
+                <span class="status-badge @badgeClass">@Html.DisplayFor(model => model.Status)</span>
+            </div>
+        </div>
+
+        <!-- 到職日期 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-calendar-alt"></i> 到職日期</div>
+            <div class="detail-value">@(Model.HireDate.ToString("yyyy-MM-dd"))</div>
+        </div>
+
+        <!-- 離職日期 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-calendar-times"></i> 離職日期</div>
+            <div class="detail-value">
+                @if (Model.LeaveDate.HasValue)
+                {
+                    @Model.LeaveDate.Value.ToString("yyyy-MM-dd")
+                }
+                else
+                {
+                    <span class="null-value">尚未離職</span>
+                }
+            </div>
+        </div>
+
+        <!-- 電子郵件 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-envelope"></i> 電子郵件</div>
+            <div class="detail-value">
+                @if (!string.IsNullOrEmpty(Model.Email))
+                {
+                    <a href="mailto:@Model.Email">@Html.DisplayFor(model => model.Email)</a>
+                }
+                else
+                {
+                    <span class="null-value">未提供</span>
+                }
+            </div>
+        </div>
+
+        <!-- 電話 -->
+        <div class="detail-item">
+            <div class="detail-label"><i class="fas fa-phone"></i> 電話</div>
+            <div class="detail-value">
+                @if (!string.IsNullOrEmpty(Model.Phone))
+                {
+                    @Html.DisplayFor(model => model.Phone)
+                }
+                else
+                {
+                    <span class="null-value">未提供</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作按鈕 -->
+    <div class="button-group">
+        <a asp-action="Edit" asp-route-id="@Model?.EmpId" class="btn-edit">
+            <i class="fas fa-edit"></i> 編輯資料
+        </a>
+        <a asp-action="Index" class="btn-back">
+            <i class="fas fa-arrow-left"></i> 返回列表
+        </a>
+    </div>
+</div>

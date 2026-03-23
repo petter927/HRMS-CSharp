@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - 員工出勤系統</title>
+    <script type="importmap"></script>
+
+    <!-- Google Font - Inter (現代字體) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 (圖示) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Bootstrap CSS (保留，但將透過自訂樣式覆蓋部分外觀) -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- 自訂全域樣式 (site.css 保留，並增加新樣式) -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Skygate_AspNet_MVC.styles.css" asp-append-version="true" />
+
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+
+    <style>
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fef5e7; 
+        }
+        
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.75) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(230, 126, 34, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 0.5rem 1rem;
+        }
+        .navbar-brand {
+            font-weight: 600;
+            color: #e67e22 !important;
+            font-size: 1.4rem;
+            letter-spacing: -0.3px;
+        }
+        .navbar-nav .nav-link {
+            color: #4a4a4a !important;
+            font-weight: 500;
+            border-radius: 30px;
+            padding: 0.5rem 1.2rem;
+            transition: background 0.2s;
+        }
+        .navbar-nav .nav-link:hover {
+            background: rgba(230, 126, 34, 0.1);
+            color: #e67e22 !important;
+        }
+        
+        .user-info {
+            color: #2c3e50;
+            font-weight: 500;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .user-info i {
+            color: #e67e22;
+            font-size: 1.2rem;
+        }
+        /* 登出按鈕 */
+        .btn-logout {
+            background: white;
+            border: 1px solid #e67e22;
+            color: #e67e22;
+            border-radius: 30px;
+            padding: 0.4rem 1.2rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-logout:hover {
+            background: #e67e22;
+            color: white;
+            border-color: #e67e22;
+        }
+
+        /* 側邊欄 - 毛玻璃效果 */
+        .sidebar-custom {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-right: 1px solid rgba(230, 126, 34, 0.15) !important;
+            min-height: 100vh;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.03);
+        }
+        .sidebar-custom .nav-link {
+            color: #2c3e50 !important;
+            font-weight: 500;
+            padding: 0.8rem 1.2rem;
+            margin: 0.2rem 0.8rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .sidebar-custom .nav-link i {
+            color: #e67e22;
+            width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        .sidebar-custom .nav-link:hover {
+            background: rgba(230, 126, 34, 0.15);
+            color: #e67e22 !important;
+            transform: translateX(4px);
+        }
+        .sidebar-custom .nav-link.active {
+            background: rgba(230, 126, 34, 0.2);
+            color: #e67e22 !important;
+            font-weight: 600;
+        }
+        /*
+        .sidebar-custom {
+            max-width: 180px; 
+            min-width: 160px;
+        }
+        */
+    
+        main {
+            background: transparent; 
+            padding-bottom: 2rem;
+        }
+        
+        .card-modern {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: none;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(230, 126, 34, 0.2);
+            padding: 2rem;
+        }
+        
+        .px-md-4 {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+        }
+    </style>
+</head>
+<body>    
+    <header class="navbar navbar-dark sticky-top navbar-custom flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
+            <i class="fas fa-clipboard-check" style="margin-right: 8px;"></i>員工出勤系統
+        </a>
+
+        <div class="navbar-nav px-3">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="nav-item text-nowrap d-flex align-items-center">
+                    <span class="user-info">
+                        <i class="fas fa-user-circle"></i> @User.Identity.Name
+                    </span>
+                    <a class="btn-logout" asp-controller="Account" asp-action="Logout">登出</a>
+                </div>
+            }
+            else
+            {
+                <div class="nav-item text-nowrap">
+                    <a class="nav-link px-3" asp-controller="Account" asp-action="Login">
+                        <i class="fas fa-sign-in-alt" style="margin-right: 6px;"></i>登入
+                    </a>
+                </div>
+            }
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 側邊欄 (加入新類別 sidebar-custom) -->
+            <nav id="sidebarMenu" class="col-md-2 col-lg-2 d-md-block bg-light sidebar-custom collapse" style="min-height: 100vh;">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Attendance/Index">
+                                <i class="fas fa-fingerprint"></i> 員工出勤登記
+                            </a>
+                        </li>
+
+                        @if (User.IsInRole("人事") || User.IsInRole("系統管理員"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Employees">
+                                    <i class="fas fa-users-cog"></i> 人事管理
+                                </a>
+                            </li>
+                        }
+                        <!-- 可再擴充其他選單，皆可加上對應圖示 -->
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 主內容區域 -->
+            <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
+                <div class="pt-3">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 日期選擇器所需 JS (保留原有順序) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

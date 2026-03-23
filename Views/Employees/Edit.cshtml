@@ -1,0 +1,233 @@
+﻿@model Skygate_AspNet_MVC.Models.Employee
+
+@{
+    ViewData["Title"] = "編輯員工資料";
+}
+
+<style>
+    /* 頁面專用樣式 (繼承全域背景) */
+    .modern-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 36px;
+        box-shadow: 0 25px 40px -12px rgba(230, 126, 34, 0.25);
+        padding: 2rem 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        margin-top: 1rem;
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .page-title i {
+        font-size: 2.2rem;
+        color: #e67e22;
+        background: linear-gradient(145deg, #e67e22, #d35400);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .page-title h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+        letter-spacing: -0.3px;
+    }
+
+    .page-title h4 {
+        color: #5a5a5a;
+        font-weight: 400;
+        margin-left: 0.5rem;
+    }
+
+    /* 表單容器 */
+    .form-container {
+        max-width: 700px;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: #2c3e50;
+        margin-bottom: 0.4rem;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        border: 1px solid #fadcba;
+        border-radius: 20px;
+        padding: 0.75rem 1.2rem;
+        font-size: 1rem;
+        transition: border 0.2s, box-shadow 0.2s;
+        background: white;
+        width: 100%;
+    }
+
+    .form-control:focus {
+        border-color: #e67e22;
+        box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.15);
+        outline: none;
+    }
+
+    /* 驗證錯誤訊息 */
+    .text-danger {
+        color: #e74c3c;
+        font-size: 0.85rem;
+        margin-top: 0.3rem;
+        display: block;
+    }
+
+    /* 按鈕群組 */
+    .button-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-save {
+        background: linear-gradient(145deg, #e67e22, #d35400);
+        border: none;
+        border-radius: 40px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        color: white;
+        transition: all 0.2s;
+        box-shadow: 0 8px 16px rgba(230, 126, 34, 0.2);
+        border: 1px solid rgba(255,255,255,0.2);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.1rem;
+        cursor: pointer;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(230, 126, 34, 0.3);
+        background: linear-gradient(145deg, #f39c12, #e67e22);
+    }
+
+    .btn-back {
+        background: white;
+        border: 1px solid #e67e22;
+        color: #e67e22;
+        border-radius: 40px;
+        padding: 0.8rem 2rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+        background: #e67e22;
+        color: white;
+        border-color: #e67e22;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(230, 126, 34, 0.2);
+    }
+
+    /* 日期輸入框右側圖示 (保留瀏覽器預設) */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(0.5) sepia(1) saturate(5) hue-rotate(350deg);
+    }
+</style>
+
+<div class="modern-card">
+    <!-- 頁面標題 -->
+    <div class="page-title">
+        <i class="fas fa-user-edit"></i>
+        <h1>編輯員工資料</h1>
+        <h4>· 工號 @Model.EmpId</h4>
+    </div>
+
+    <!-- 編輯表單 -->
+    <div class="form-container">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 1.5rem;"></div>
+            <input type="hidden" asp-for="EmpId" />
+
+            <div class="form-group">
+                <label asp-for="EmpName">姓名</label>
+                <input asp-for="EmpName" class="form-control" placeholder="請輸入姓名" />
+                <span asp-validation-for="EmpName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DeptId">部門代號</label>
+                <input asp-for="DeptId" class="form-control" placeholder="例如: HR, IT" />
+                <span asp-validation-for="DeptId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Title">職稱</label>
+                <input asp-for="Title" class="form-control" placeholder="例如: 工程師" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SupervisorId">主管工號</label>
+                <input asp-for="SupervisorId" class="form-control" placeholder="若無主管請留空" />
+                <span asp-validation-for="SupervisorId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Status">在職狀態</label>
+                <input asp-for="Status" class="form-control" placeholder="例如: 在職, 離職" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HireDate">到職日期</label>
+                <input asp-for="HireDate" class="form-control" type="date" />
+                <span asp-validation-for="HireDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LeaveDate">離職日期</label>
+                <input asp-for="LeaveDate" class="form-control" type="date" />
+                <span asp-validation-for="LeaveDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email">電子郵件</label>
+                <input asp-for="Email" class="form-control" type="email" placeholder="example@company.com" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone">電話</label>
+                <input asp-for="Phone" class="form-control" placeholder="例如: 02-12345678" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <!-- 按鈕群組 -->
+            <div class="button-group">
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-save"></i> 儲存變更
+                </button>
+                <a asp-action="Index" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> 返回列表
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
