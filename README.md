@@ -1,0 +1,5 @@
+## 📸 系統截圖 (Screenshots)
+![登入介面](images/screenshot1.png)
+![出勤登記](images/screenshot2.png)
+![人事管理](images/screenshot3.png)
+![詳細資料](images/screenshot4.png)
